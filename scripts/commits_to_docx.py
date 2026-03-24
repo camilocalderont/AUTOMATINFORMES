@@ -1,0 +1,1 @@
+../.claude/skills/generar-commits/scripts/commits_to_docx.py

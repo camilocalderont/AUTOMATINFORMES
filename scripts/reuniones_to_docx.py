@@ -1,0 +1,1 @@
+../.claude/skills/resumen-reuniones/scripts/reuniones_to_docx.py

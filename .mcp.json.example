@@ -1,0 +1,64 @@
+{
+    "mcpServers": {
+        "jira-idartes": {
+            "type": "stdio",
+            "command": "uvx",
+            "args": [
+                "mcp-atlassian"
+            ],
+            "env": {
+                "JIRA_URL": "https://your-org.atlassian.net",
+                "JIRA_USERNAME": "${JIRA_IDARTES_EMAIL}",
+                "JIRA_API_TOKEN": "${JIRA_IDARTES_API_TOKEN}"
+            }
+        },
+        "gmail-idt": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "-y",
+                "@gongrzhe/server-gmail-autoauth-mcp"
+            ],
+            "env": {
+                "GMAIL_OAUTH_PATH": "/path/to/.gmail-mcp/idt-credentials.json",
+                "GMAIL_CREDENTIALS_PATH": "/path/to/.gmail-mcp/idt-tokens.json"
+            }
+        },
+        "gmail-idartes": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "-y",
+                "@gongrzhe/server-gmail-autoauth-mcp"
+            ],
+            "env": {
+                "GMAIL_OAUTH_PATH": "/path/to/.gmail-mcp/idartes-credentials.json",
+                "GMAIL_CREDENTIALS_PATH": "/path/to/.gmail-mcp/idartes-tokens.json"
+            }
+        },
+        "calendar-idt": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "-y",
+                "@cocal/google-calendar-mcp"
+            ],
+            "env": {
+                "GOOGLE_OAUTH_CREDENTIALS": "/path/to/.google-calendar-mcp/oauth-credentials.json",
+                "GOOGLE_CALENDAR_MCP_TOKEN_PATH": "/path/to/.google-calendar-mcp/idt-tokens.json"
+            }
+        },
+        "calendar-idartes": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+                "-y",
+                "@cocal/google-calendar-mcp"
+            ],
+            "env": {
+                "GOOGLE_OAUTH_CREDENTIALS": "/path/to/.google-calendar-mcp/oauth-credentials.json",
+                "GOOGLE_CALENDAR_MCP_TOKEN_PATH": "/path/to/.google-calendar-mcp/idartes-tokens.json"
+            }
+        }
+    }
+}

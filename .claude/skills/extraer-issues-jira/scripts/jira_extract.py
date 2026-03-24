@@ -1,0 +1,1 @@
+../../../../scripts/jira_extract.py

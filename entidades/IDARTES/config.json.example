@@ -1,0 +1,105 @@
+{
+    "entidad": "IDARTES",
+    "nombre_completo": "Instituto Distrital de las Artes",
+    "correo_autor": [
+        "tu.correo@entidad1.gov.co",
+        "tu.correo@entidad2.gov.co",
+        "tu.correo.personal@gmail.com"
+    ],
+    "git": {
+        "rama_principal": "master_proxy",
+        "ruta_proyecto": "/ruta/a/tu/repositorio/pandora_proxy",
+        "patrones_ramas": [
+            "CP-*",
+            "GLPI-*"
+        ]
+    },
+    "mesa_servicios": {
+        "tipo": "glpi",
+        "url": "https://glpi.tudominio.gov.co",
+        "archivos_patron": [
+            "*glpi*.xlsx",
+            "*glpi*.csv",
+            "*GLPI*.xlsx",
+            "*GLPI*.csv",
+            "*tickets*.xlsx",
+            "*soportes*.xlsx"
+        ]
+    },
+    "gestion_proyectos": {
+        "tipo": "jira",
+        "url": "https://tu-org.atlassian.net"
+    },
+    "api": {
+        "gmail": {
+            "mcp_server": "gmail-idartes",
+            "cuenta": "tu.correo@entidad.gov.co",
+            "credentials_path": "~/.gmail-mcp/idartes-credentials.json"
+        },
+        "glpi": {
+            "script": "scripts/glpi_extract.py",
+            "url_env": "GLPI_IDARTES_URL",
+            "app_token_env": "",
+            "user_token_env": ""
+        },
+        "jira": {
+            "mcp_server": "jira-idartes",
+            "url_env": "JIRA_IDARTES_URL",
+            "email_env": "JIRA_IDARTES_EMAIL",
+            "token_env": "JIRA_IDARTES_API_TOKEN",
+            "proyecto": "CP",
+            "account_id": "tu-account-id-de-jira",
+            "jql_base": "project = {proyecto} AND assignee = {account_id} AND statusCategory = Done AND resolved >= '{fecha_inicio}' AND resolved <= '{fecha_fin}' ORDER BY resolved DESC"
+        },
+        "calendar": {
+            "tipo": "google",
+            "mcp_server": "calendar-idartes",
+            "cuenta": "tu.correo@entidad.gov.co"
+        }
+    },
+    "rutas": {
+        "carpeta_anual": "/ruta/a/GoogleDrive/o/OneDrive/{year}",
+        "carpeta_mes": "{carpeta_anual}/INFORMES/{month_name}",
+        "carpeta_evidencias": "{carpeta_mes}/ANEXOS",
+        "carpeta_fuentes": "{carpeta_mes}/FUENTE",
+        "carpeta_reuniones": "{carpeta_fuentes}/TRANSCRIPCIONES",
+        "subcarpetas": [
+            "ANEXOS",
+            "FUENTE",
+            "FUENTE/TRANSCRIPCIONES"
+        ]
+    },
+    "anexos": {
+        "historias_usuario": {
+            "nombre": "Anexo 1A. Historias de Usuario Jira",
+            "extension": ".xlsx",
+            "obligaciones": [1, 6],
+            "fuente_key": "jira"
+        },
+        "commits": {
+            "nombre": "Anexo 1B. Informe de commits",
+            "extension": ".docx",
+            "obligaciones": [1, 3, 6],
+            "fuente_key": "commits"
+        },
+        "soportes": {
+            "nombre": "Anexo 2A. Soportes GLPI",
+            "extension": ".xlsx",
+            "obligaciones": [2],
+            "fuente_key": "glpi"
+        },
+        "correos": {
+            "nombre": "Anexo 2B. Correos de Soporte",
+            "extension": ".docx",
+            "obligaciones": [2],
+            "fuente_key": "correos"
+        },
+        "reuniones": {
+            "nombre": "Anexo 9A. Resumen de Reuniones",
+            "extension": ".docx",
+            "obligaciones": [9],
+            "fuente_key": "reuniones"
+        }
+    },
+    "obligaciones_count": 9
+}

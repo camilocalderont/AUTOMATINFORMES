@@ -1,0 +1,1 @@
+../.claude/skills/extraer-tickets-glpi/scripts/glpi_extract.py

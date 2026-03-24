@@ -1,0 +1,1 @@
+../.claude/skills/extraer-issues-jira/scripts/jira_to_excel.py

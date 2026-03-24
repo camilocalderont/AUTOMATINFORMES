@@ -1,0 +1,1 @@
+../.claude/skills/generar-soportes-glpi/scripts/glpi_to_excel.py

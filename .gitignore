@@ -1,0 +1,38 @@
+# Archivos temporales y de configuración del entorno de desarrollo
+.DS_Store
+node_modules/
+dist/
+*.credentials.json
+.vscode/
+.idea/
+*.log
+coverage/
+*.tmp
+*.bak
+Thumbs.db
+output/
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Variables de entorno (credenciales)
+.env
+.env.local
+.env.production
+
+# MCP config (contiene rutas locales a tokens OAuth)
+.mcp.json
+.mcp.bk.json
+
+# Configuración por entidad (contiene emails, rutas locales, account_id)
+entidades/*/config.json
+
+# Datos de correo exportados
+mail-agent/inbox_*.json
+mail-agent/.env
+mail-agent/.venv/
+
+# Archivos de contexto (contienen datos personales en ejemplos)
+contexto/

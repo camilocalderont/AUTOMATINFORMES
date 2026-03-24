@@ -1,0 +1,21 @@
+# SMTP + Power Automate (funcional sin admin consent)
+python-dotenv>=1.0.0
+
+# CLI & UI
+click>=8.1.0
+rich>=13.7.0
+
+# Email parsing
+beautifulsoup4>=4.12.0
+html2text>=2024.2.26
+
+# Data analysis
+pandas>=2.2.0
+
+# --- Opcionales (requieren admin consent) ---
+# msal>=1.28.0         # Graph API / IMAP OAuth2
+# requests>=2.31.0     # Graph API
+# exchangelib>=5.6.0   # EWS (también bloqueado en M365 modernos)
+
+# Optional: clasificador con IA
+# anthropic>=0.25.0
