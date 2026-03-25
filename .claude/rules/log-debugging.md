@@ -1,0 +1,1 @@
+../../agents/rules/log-debugging.md

@@ -1,0 +1,1 @@
+../../agents/rules/redaccion-español.md

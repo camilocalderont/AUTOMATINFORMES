@@ -1,0 +1,1 @@
+../../agents/rules/cumplimiento-pasos.md
