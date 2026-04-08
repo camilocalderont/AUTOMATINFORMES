@@ -134,6 +134,7 @@ AUTOMATINFORMES/
 | `/extraer-tickets-glpi` | Extrae tickets GLPI vía REST API | IDARTES, SDMUJER |
 | `/generar-plan-accion` | Genera reporte Plan de Acción | SDMUJER |
 | `/extraer-reuniones-calendario` | Extrae reuniones del calendario vía API | Todas |
+| `/verificar-informe` | Valida coherencia obligación ↔ evidencia (modelo opus) | Todas |
 
 Todos los skills aceptan argumentos: `ENTIDAD FECHA_INICIO FECHA_FIN`
 
@@ -188,11 +189,14 @@ Todos los skills aceptan argumentos: `ENTIDAD FECHA_INICIO FECHA_FIN`
 
 ## RULES ACTIVAS
 
-| Rule | Qué enforce |
-|------|-------------|
-| `redaccion-español` | Tildes, sin calificativos, citar evidencia, no inventar |
-| `estilo-informes` | Primera persona + pasado (Memorando SDMUJER 3-2026-000375) |
-| `fechas-estrictas` | NUNCA modificar rangos de fecha en búsquedas |
-| `log-debugging` | Comandos exactos + resultados en cada paso del log |
-| `onedrive-find` | Warm-up obligatorio + no stat + retry-once |
-| `cumplimiento-pasos` | Cada PASO es obligatorio, reportar antes de avanzar |
+| Rule | Código | Qué enforce |
+|------|--------|-------------|
+| `redaccion-español` | R1 | Tildes, sin calificativos, citar evidencia, scripts Python con tildes, idioma es-CO |
+| `estilo-informes` | R2 | Primera persona + pasado (Memorando SDMUJER 3-2026-000375) |
+| `fechas-estrictas` | R3 | NUNCA modificar rangos de fecha en búsquedas |
+| `log-debugging` | R4 | Comandos exactos + resultados en cada paso del log |
+| `onedrive-find` | R5 | Warm-up obligatorio + no stat + retry-once |
+| `cumplimiento-pasos` | R6 | Cada PASO es obligatorio, reportar antes de avanzar |
+| `no-inventar-contenido` | R7 | NUNCA fabricar correos/evidencias. PDF ilegible → reportar, no inventar |
+
+**Inyección:** Las 7 reglas están condensadas en `agents/skills/shared/paso0-rutas.md` (sección "Reglas compactas"). Todos los skills las cargan automáticamente al ejecutar PASO 0.

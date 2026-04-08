@@ -9,6 +9,9 @@ metadata:
   tags: [glpi, tickets, api, mesa-servicios]
 ---
 
+> **REGLAS OBLIGATORIAS** (R1-R7) — ver `agents/skills/shared/paso0-rutas.md#reglas-compactas`. Aplican sin excepción a este skill.
+
+
 # Skill: Extraer Tickets de GLPI via API
 
 Extrae tickets de la mesa de servicios GLPI en el periodo indicado, usando el script Python `scripts/glpi_extract.py` que consume la REST API de GLPI.

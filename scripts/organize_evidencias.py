@@ -22,10 +22,10 @@ Input JSON:
         ]
     }
 
-Logica:
-- accion "copy": shutil.copy2() (archivos fuera de carpeta_evidencias)
-- accion "move": shutil.move() (archivos dentro de carpeta_evidencias)
-- Crea carpetas OBLIGACION_N/ automaticamente
+Lógica:
+- acción "copy": shutil.copy2() (archivos fuera de carpeta_evidencias)
+- acción "move": shutil.move() (archivos dentro de carpeta_evidencias)
+- Crea carpetas OBLIGACION_N/ automáticamente
 - Imprime resumen JSON a stdout
 """
 

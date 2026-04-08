@@ -10,6 +10,9 @@ metadata:
   mcp-server: outlook-sdmujer
 ---
 
+> **REGLAS OBLIGATORIAS** (R1-R7) — ver `agents/skills/shared/paso0-rutas.md#reglas-compactas`. Aplican sin excepción a este skill.
+
+
 # Skill: Extraer Correos de Outlook (Microsoft 365)
 
 Extrae correos enviados desde la cuenta Outlook/M365 de la entidad en el periodo indicado, usando el MCP server correspondiente (`@softeria/ms-365-mcp-server`).

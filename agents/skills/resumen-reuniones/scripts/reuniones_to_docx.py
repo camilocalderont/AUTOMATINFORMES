@@ -45,7 +45,36 @@ from datetime import datetime
 from docx import Document
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.oxml.ns import qn
 from docx.shared import Cm, Inches, Pt, RGBColor
+
+
+def set_document_language(doc, lang_code="es-CO"):
+    """Configura el idioma del documento Word a español (Colombia)."""
+    styles_element = doc.styles.element
+    rpr_default = styles_element.find(qn("w:docDefaults"))
+    if rpr_default is None:
+        from docx.oxml import OxmlElement
+        rpr_default = OxmlElement("w:docDefaults")
+        styles_element.insert(0, rpr_default)
+    rpr = rpr_default.find(qn("w:rPrDefault"))
+    if rpr is None:
+        from docx.oxml import OxmlElement
+        rpr = OxmlElement("w:rPrDefault")
+        rpr_default.append(rpr)
+    rpr_inner = rpr.find(qn("w:rPr"))
+    if rpr_inner is None:
+        from docx.oxml import OxmlElement
+        rpr_inner = OxmlElement("w:rPr")
+        rpr.append(rpr_inner)
+    lang = rpr_inner.find(qn("w:lang"))
+    if lang is None:
+        from docx.oxml import OxmlElement
+        lang = OxmlElement("w:lang")
+        rpr_inner.append(lang)
+    lang.set(qn("w:val"), lang_code)
+    lang.set(qn("w:eastAsia"), lang_code)
+    lang.set(qn("w:bidi"), lang_code)
 
 
 def set_cell_shading(cell, color_hex):
@@ -72,6 +101,7 @@ def generate_docx(data, output_path):
     tabla_resumen = data.get("tabla_resumen", [])
 
     doc = Document()
+    set_document_language(doc, "es-CO")
 
     # Estilos del documento
     style = doc.styles["Normal"]
@@ -88,14 +118,14 @@ def generate_docx(data, output_path):
     # Subtitulo
     subtitle = doc.add_paragraph()
     subtitle.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    run = subtitle.add_run(f"Periodo: {periodo_inicio} a {periodo_fin}")
+    run = subtitle.add_run(f"Período: {periodo_inicio} a {periodo_fin}")
     run.font.size = Pt(11)
     run.font.color.rgb = RGBColor(100, 100, 100)
 
     # Estadisticas
     stats_para = doc.add_paragraph()
     stats_para.add_run(f"Total de reuniones: {total_reuniones}").bold = True
-    stats_para.add_run(f"  |  Con transcripcion: {con_transcripcion}")
+    stats_para.add_run(f"  |  Con transcripción: {con_transcripcion}")
     stats_para.add_run(f"  |  Solo calendario: {solo_calendario}")
 
     doc.add_paragraph()
@@ -103,7 +133,7 @@ def generate_docx(data, output_path):
     # Tabla resumen
     if tabla_resumen:
         doc.add_heading("Tabla Resumen", level=1)
-        headers = ["#", "Fecha", "Reunion", "Participantes", "Temas Principales"]
+        headers = ["#", "Fecha", "Reunión", "Participantes", "Temas Principales"]
         table = doc.add_table(rows=1, cols=len(headers))
         table.alignment = WD_TABLE_ALIGNMENT.CENTER
         table.style = "Table Grid"
@@ -152,7 +182,7 @@ def generate_docx(data, output_path):
         doc.add_heading("Detalle de Reuniones", level=1)
 
         for reunion in reuniones_con_trans:
-            nombre = reunion.get("nombre", "Sin titulo")
+            nombre = reunion.get("nombre", "Sin título")
             fecha = reunion.get("fecha", "")
             hora = reunion.get("hora", "")
             asistentes = reunion.get("asistentes", [])
@@ -177,7 +207,7 @@ def generate_docx(data, output_path):
             # Resumen
             if resumen:
                 res_heading = doc.add_paragraph()
-                res_heading.add_run("Resumen de la sesion:").bold = True
+                res_heading.add_run("Resumen de la sesión:").bold = True
                 doc.add_paragraph(resumen)
 
             # Puntos clave
@@ -196,13 +226,13 @@ def generate_docx(data, output_path):
 
     # Reuniones sin transcripcion
     if reuniones_sin_trans:
-        doc.add_heading("Reuniones sin transcripcion (datos de calendario)", level=1)
+        doc.add_heading("Reuniones sin transcripción (datos de calendario)", level=1)
         doc.add_paragraph(
             "Las siguientes reuniones fueron identificadas en el calendario "
-            "institucional pero no cuentan con transcripcion disponible:"
+            "institucional pero no cuentan con transcripción disponible:"
         )
 
-        headers = ["#", "Fecha", "Hora", "Reunion", "Participantes"]
+        headers = ["#", "Fecha", "Hora", "Reunión", "Participantes"]
         table = doc.add_table(rows=1, cols=len(headers))
         table.alignment = WD_TABLE_ALIGNMENT.CENTER
         table.style = "Table Grid"
@@ -242,7 +272,7 @@ def generate_docx(data, output_path):
     doc.add_paragraph()
     footer = doc.add_paragraph()
     footer.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    run = footer.add_run(f"Generado automaticamente el {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+    run = footer.add_run(f"Generado automáticamente el {datetime.now().strftime('%Y-%m-%d %H:%M')}")
     run.font.size = Pt(8)
     run.font.color.rgb = RGBColor(150, 150, 150)
     run.italic = True

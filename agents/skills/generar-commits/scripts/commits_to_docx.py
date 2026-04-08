@@ -42,7 +42,36 @@ from datetime import datetime
 from docx import Document
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.oxml.ns import qn
 from docx.shared import Cm, Pt, RGBColor
+
+
+def set_document_language(doc, lang_code="es-CO"):
+    """Configura el idioma del documento Word a español (Colombia)."""
+    styles_element = doc.styles.element
+    rpr_default = styles_element.find(qn("w:docDefaults"))
+    if rpr_default is None:
+        from docx.oxml import OxmlElement
+        rpr_default = OxmlElement("w:docDefaults")
+        styles_element.insert(0, rpr_default)
+    rpr = rpr_default.find(qn("w:rPrDefault"))
+    if rpr is None:
+        from docx.oxml import OxmlElement
+        rpr = OxmlElement("w:rPrDefault")
+        rpr_default.append(rpr)
+    rpr_inner = rpr.find(qn("w:rPr"))
+    if rpr_inner is None:
+        from docx.oxml import OxmlElement
+        rpr_inner = OxmlElement("w:rPr")
+        rpr.append(rpr_inner)
+    lang = rpr_inner.find(qn("w:lang"))
+    if lang is None:
+        from docx.oxml import OxmlElement
+        lang = OxmlElement("w:lang")
+        rpr_inner.append(lang)
+    lang.set(qn("w:val"), lang_code)
+    lang.set(qn("w:eastAsia"), lang_code)
+    lang.set(qn("w:bidi"), lang_code)
 
 
 def set_cell_shading(cell, color_hex):
@@ -69,6 +98,7 @@ def generate_docx(data, output_path):
     commits = data.get("commits", [])
 
     doc = Document()
+    set_document_language(doc, "es-CO")
 
     # Estilos del documento
     style = doc.styles["Normal"]
@@ -76,16 +106,16 @@ def generate_docx(data, output_path):
     style.font.size = Pt(11)
     style.paragraph_format.space_after = Pt(6)
 
-    # Titulo
+    # Título
     title = doc.add_heading(level=0)
     run = title.add_run(f"INFORME DE COMMITS - {entidad}")
     run.font.color.rgb = RGBColor(0, 51, 102)
     title.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
-    # Subtitulo con periodo y estadisticas
+    # Subtítulo con período y estadísticas
     subtitle = doc.add_paragraph()
     subtitle.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    run = subtitle.add_run(f"Periodo: {periodo_inicio} a {periodo_fin}")
+    run = subtitle.add_run(f"Período: {periodo_inicio} a {periodo_fin}")
     run.font.size = Pt(11)
     run.font.color.rgb = RGBColor(100, 100, 100)
 
@@ -97,9 +127,9 @@ def generate_docx(data, output_path):
 
     doc.add_paragraph()
 
-    # Descripcion general
+    # Descripción general
     if descripcion:
-        doc.add_heading("Descripcion General", level=1)
+        doc.add_heading("Descripción General", level=1)
         for parrafo in descripcion.split("\n\n"):
             parrafo = parrafo.strip()
             if parrafo:
@@ -140,7 +170,7 @@ def generate_docx(data, output_path):
     if commits:
         doc.add_heading("Tabla Completa de Commits", level=1)
 
-        headers = ["#", "Commit ID", "Repositorio", "Rama", "Descripcion", "Fecha"]
+        headers = ["#", "Commit ID", "Repositorio", "Rama", "Descripción", "Fecha"]
         table = doc.add_table(rows=1, cols=len(headers))
         table.alignment = WD_TABLE_ALIGNMENT.CENTER
         table.style = "Table Grid"
@@ -189,7 +219,7 @@ def generate_docx(data, output_path):
     footer = doc.add_paragraph()
     footer.alignment = WD_ALIGN_PARAGRAPH.CENTER
     run = footer.add_run(
-        f"Generado automaticamente el {datetime.now().strftime('%Y-%m-%d %H:%M')}"
+        f"Generado automáticamente el {datetime.now().strftime('%Y-%m-%d %H:%M')}"
     )
     run.font.size = Pt(8)
     run.font.color.rgb = RGBColor(150, 150, 150)

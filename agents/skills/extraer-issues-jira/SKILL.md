@@ -9,6 +9,9 @@ metadata:
   tags: [jira, issues, api, extracción]
 ---
 
+> **REGLAS OBLIGATORIAS** (R1-R7) — ver `agents/skills/shared/paso0-rutas.md#reglas-compactas`. Aplican sin excepción a este skill.
+
+
 # Skill: Extraer Issues Finalizados de Jira
 
 Extrae issues **finalizados** (statusCategory = Done) de Jira Cloud asignadas al usuario y resueltos en el periodo indicado, usando el script `jira_extract.py`.

@@ -9,6 +9,9 @@ metadata:
   tags: [glpi, soporte, mesa-servicios, tickets]
 ---
 
+> **REGLAS OBLIGATORIAS** (R1-R7) — ver `agents/skills/shared/paso0-rutas.md#reglas-compactas`. Aplican sin excepción a este skill.
+
+
 # Skill: Generar Reporte de Soportes GLPI
 
 ## ENTRADA
@@ -21,7 +24,7 @@ metadata:
 
 ### PASO 0: Resolver rutas
 
-Ejecutar la resolucion de rutas estandar segun `.claude/skills/shared/paso0-rutas.md`.
+Ejecutar la resolución de rutas estándar según `.claude/skills/shared/paso0-rutas.md`.
 
 **Variables adicionales de este skill:**
 - `{dia_actual}` = `date +%Y-%m-%d`
@@ -30,13 +33,13 @@ Ejecutar la resolucion de rutas estandar segun `.claude/skills/shared/paso0-ruta
 ### PASO 1: Validar entidad
 Solo IDARTES y SDMUJER usan GLPI. Si la entidad es IDT o UAECD, indicar que deben usar `/generar-soportes-correo`.
 
-### PASO 1.5: Intentar extraccion via API (si disponible)
+### PASO 1.5: Intentar extracción vía API (si disponible)
 
-**Nota:** Si se proporciono $3 (ruta a archivo), saltar este paso completo y usar el archivo directamente.
+**Nota:** Si se proporcionó $3 (ruta a archivo), saltar este paso completo y usar el archivo directamente.
 
-**PASO 1.5A: Verificar extraccion previa**
+**PASO 1.5A: Verificar extracción previa**
 
-Antes de llamar la API, verificar si ya existe el archivo de extraccion API en `{carpeta_evidencias}`:
+Antes de llamar la API, verificar si ya existe el archivo de extracción API en `{carpeta_evidencias}`:
 ```bash
 ls "{carpeta_evidencias}/tickets_glpi_api_{entidad_lower}_{mes}.md" 2>/dev/null
 ```
@@ -65,38 +68,11 @@ Verificar si la entidad tiene `api.glpi` configurada en `config.json`:
 
 **Si $3 fue proporcionado:** Usar esa ruta directamente.
 
-**Si $3 NO fue proporcionado:** Auto-localizar en 3 niveles de busqueda:
+**Si $3 NO fue proporcionado:** Auto-localizar en 3 niveles (FUENTES → carpeta_evidencias → carpeta_anual). Usar el primer nivel con resultados; si hay varios archivos, usar el más reciente.
 
-**Nivel 1 - FUENTES** (prioridad maxima, archivos fuente del informe con fecha hasta hoy):
-```bash
-find "{carpeta_fuentes}" -type f \
-  -newermt "$1" -not -newermt "{dia_actual}" \
-  \( -name "*glpi*.xlsx" -o -name "*glpi*.csv" -o -name "*GLPI*.xlsx" -o -name "*GLPI*.csv" -o -name "*tickets*.xlsx" -o -name "*soportes*.xlsx" \) \
-  2>/dev/null
-```
+**Ver detalle en** `references/busqueda-archivo.md`
 
-**Nivel 2 - carpeta_evidencias** (archivos modificados en el periodo):
-```bash
-find "{carpeta_evidencias}" -type f \
-  -newermt "$1" -not -newermt "$2" \
-  \( -name "*glpi*.xlsx" -o -name "*glpi*.csv" -o -name "*GLPI*.xlsx" -o -name "*GLPI*.csv" -o -name "*tickets*.xlsx" -o -name "*soportes*.xlsx" \) \
-  2>/dev/null
-```
-
-**Nivel 3 - carpeta_anual** (fallback, excluyendo INFORMES/):
-```bash
-find "{carpeta_anual}" -type f \
-  -newermt "$1" -not -newermt "$2" \
-  -not -path "*/INFORMES/*" \
-  \( -name "*glpi*.xlsx" -o -name "*glpi*.csv" -o -name "*GLPI*.xlsx" -o -name "*GLPI*.csv" -o -name "*tickets*.xlsx" -o -name "*soportes*.xlsx" \) \
-  2>/dev/null
-```
-
-**REGLA:** Usar el primer nivel que devuelva resultados. La carpeta FUENTES/ es donde el usuario deja los exports de GLPI para el informe, y se busca con `{dia_actual}` como limite porque se generan despues del periodo.
-
-Si se encuentra mas de un archivo, usar el mas reciente.
-
-**Si no se encuentra ningun archivo Y la API tampoco genero datos (PASO 1.5):**
+**Si no se encuentra ningún archivo Y la API tampoco generó datos (PASO 1.5):**
 - NO solicitar ruta manualmente
 - Redactar el reporte indicando: "Durante el periodo reportado no se registraron solicitudes de soporte a traves de la mesa de servicios GLPI."
 - Saltar a PASO 6 (guardar output con el mensaje de no actividad)
@@ -125,46 +101,9 @@ De cada ticket extraer:
 
 ### PASO 4B: Generar Excel (si no existe)
 
-**Verificar primero** si ya existe un Excel generado por la API (PASO 2A de generar-informe):
-```bash
-ls "{carpeta_fuentes}/glpi_{entidad_lower}_{mes}.xlsx" 2>/dev/null
-```
+Si ya existe `{carpeta_fuentes}/glpi_{entidad_lower}_{mes}.xlsx` (generado por API), saltar. Si no existe y se procesaron tickets desde CSV/Excel local: construir JSON intermedio → ejecutar `glpi_to_excel.py` → eliminar JSON.
 
-**Si ya existe:** Saltar este paso (la API ya lo genero).
-
-**Si NO existe** y se procesaron tickets (desde CSV/Excel local en PASO 3):
-
-1. Resolver `{carpeta_fuentes}` desde `rutas.carpeta_fuentes` en config.json (fallback: `{carpeta_evidencias}/FUENTES/`)
-2. Construir JSON intermedio con los datos parseados del archivo local:
-```json
-{
-    "entidad": "{$0}",
-    "periodo_inicio": "{$1}",
-    "periodo_fin": "{$2}",
-    "total": N,
-    "tickets": [
-        {
-            "id": "12345",
-            "titulo": "Titulo del ticket",
-            "tipo": "Incidencia",
-            "estado": "Cerrado",
-            "fecha_apertura": "YYYY-MM-DD",
-            "fecha_cierre": "YYYY-MM-DD",
-            "prioridad": "Media",
-            "categoria": "Software",
-            "solicitante": "usuario@entidad.gov.co",
-            "solucion": "Descripcion de la solucion..."
-        }
-    ]
-}
-```
-3. Escribir JSON intermedio en: `{carpeta_fuentes}/_glpi_data_{entidad_lower}_{mes}.json`
-4. Ejecutar:
-```bash
-python3 scripts/glpi_to_excel.py "{carpeta_fuentes}/_glpi_data_{entidad_lower}_{mes}.json" "{carpeta_fuentes}/glpi_{entidad_lower}_{mes}.xlsx"
-```
-5. Si exitoso: eliminar JSON intermedio
-6. Informar: "Excel generado: `{carpeta_fuentes}/glpi_{entidad_lower}_{mes}.xlsx`"
+**Ver detalle en** `references/generacion-excel.md`
 
 ### PASO 5: Generar contenido
 
@@ -225,27 +164,9 @@ Actions:
 4. Genera Excel via glpi_to_excel.py
 Result: `soportes_glpi_sdmujer_febrero.md` + `glpi_sdmujer_febrero.xlsx`
 
-## MAPEO A OBLIGACIONES
+## MAPEO, USO Y ARCHIVO GENERADO
 
-| Entidad | Obligacion | Texto |
-|---------|------------|-------|
-| IDARTES | 2 | Realizar el soporte tecnico de acuerdo con la asignacion realizada por la mesa de servicios... |
-| SDMUJER | 4 | Atender de forma correcta y oportuna los requerimientos internos... |
+**Ver detalle en** `references/referencia-obligaciones.md`
 
-## EJEMPLO DE USO
-
-```
-# Con auto-localizacion de archivo
-/generar-soportes-glpi IDARTES 2026-01-01 2026-01-31
-
-# Con ruta especifica
-/generar-soportes-glpi IDARTES 2026-01-01 2026-01-31 /path/to/glpi_enero.xlsx
-```
-
-## ARCHIVO GENERADO
-
-| Campo | Valor |
-|-------|-------|
-| Nombre | `soportes_glpi_{entidad_lower}_{mes}.md` |
-| Ubicacion | `{carpeta_evidencias}/` |
-| Ejemplo | `.../01. ENERO/ANEXOS/soportes_glpi_idartes_enero.md` |
+- **Obligaciones:** IDARTES→2, SDMUJER→4
+- **Archivo:** `{carpeta_evidencias}/soportes_glpi_{entidad_lower}_{mes}.md`

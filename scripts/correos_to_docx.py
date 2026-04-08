@@ -43,11 +43,36 @@ from datetime import datetime
 from docx import Document
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 
 
+def set_document_language(doc, lang_code="es-CO"):
+    """Configura el idioma del documento Word a español (Colombia)."""
+    styles_element = doc.styles.element
+    rpr_default = styles_element.find(qn("w:docDefaults"))
+    if rpr_default is None:
+        rpr_default = OxmlElement("w:docDefaults")
+        styles_element.insert(0, rpr_default)
+    rpr = rpr_default.find(qn("w:rPrDefault"))
+    if rpr is None:
+        rpr = OxmlElement("w:rPrDefault")
+        rpr_default.append(rpr)
+    rpr_inner = rpr.find(qn("w:rPr"))
+    if rpr_inner is None:
+        rpr_inner = OxmlElement("w:rPr")
+        rpr.append(rpr_inner)
+    lang = rpr_inner.find(qn("w:lang"))
+    if lang is None:
+        lang = OxmlElement("w:lang")
+        rpr_inner.append(lang)
+    lang.set(qn("w:val"), lang_code)
+    lang.set(qn("w:eastAsia"), lang_code)
+    lang.set(qn("w:bidi"), lang_code)
+
+
 def add_horizontal_line(doc):
-    """Agrega una linea horizontal al documento."""
+    """Agrega una línea horizontal al documento."""
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(6)
     p.paragraph_format.space_after = Pt(6)
@@ -67,7 +92,7 @@ def add_horizontal_line(doc):
 
 
 def add_metadata_line(doc, label, value, indent=False):
-    """Agrega una linea de metadatos (De:, Para:, etc.)."""
+    """Agrega una línea de metadatos (De:, Para:, etc.)."""
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(1)
     p.paragraph_format.space_after = Pt(1)
@@ -98,7 +123,7 @@ def add_body_text(doc, body, indent=False):
 
 
 def clean_html_body(body):
-    """Limpia HTML basico del cuerpo del correo."""
+    """Limpia HTML básico del cuerpo del correo."""
     if not body:
         return ""
     import re
@@ -129,6 +154,7 @@ def generate_docx(data, output_path):
     correos = data.get("correos", [])
 
     doc = Document()
+    set_document_language(doc, "es-CO")
 
     style = doc.styles["Normal"]
     style.font.name = "Calibri"
@@ -148,7 +174,7 @@ def generate_docx(data, output_path):
     subtitle = doc.add_paragraph()
     subtitle.alignment = WD_ALIGN_PARAGRAPH.CENTER
     run = subtitle.add_run(
-        f"Periodo: {periodo_inicio} a {periodo_fin}  |  Cuenta: {cuenta}  |  Total: {total} correos"
+        f"Período: {periodo_inicio} a {periodo_fin}  |  Cuenta: {cuenta}  |  Total: {total} correos"
     )
     run.font.size = Pt(9)
     run.font.color.rgb = RGBColor(0x66, 0x66, 0x66)

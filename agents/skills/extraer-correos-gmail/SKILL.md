@@ -10,6 +10,9 @@ metadata:
   mcp-server: gmail-idt
 ---
 
+> **REGLAS OBLIGATORIAS** (R1-R7) — ver `agents/skills/shared/paso0-rutas.md#reglas-compactas`. Aplican sin excepción a este skill.
+
+
 # Skill: Extraer Correos de Gmail
 
 Extrae correos enviados desde la cuenta Gmail de la entidad en el periodo indicado, usando el MCP server correspondiente.

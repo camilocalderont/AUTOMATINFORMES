@@ -9,6 +9,9 @@ metadata:
   tags: [git, commits, desarrollo, pandora]
 ---
 
+> **REGLAS OBLIGATORIAS** (R1-R7) — ver `agents/skills/shared/paso0-rutas.md#reglas-compactas`. Aplican sin excepción a este skill.
+
+
 # Skill: Generar Reporte de Commits
 
 ## ENTRADA
@@ -24,35 +27,21 @@ Ejecutar la resolucion de rutas estandar segun `.claude/skills/shared/paso0-ruta
 
 Verificar `{carpeta_evidencias}` existe; si no, buscar desde `{carpeta_mes}` o preguntar al usuario.
 
-### PASO 1: Construir y ejecutar comando unico de extraccion
+### PASO 1: Construir y ejecutar extraccion con doble pasada
 
 Del config.json ya leido, construir las variables:
 - `{author_filter}` = `correo_autor[]` unido con `\|`
 - `{branch_filters}` = `--branches='{rama_principal}*'` + un `--branches='{patron}'` por cada elemento de `git.patrones_ramas`
+- `{message_filters}` = `git.patrones_mensaje[]` unido con `\|` (ej: `"(sdmujer)\|(SDMujer)\|(SdMujer)"`)
 - `{ruta_proyecto}` = `git.ruta_proyecto`
 
-Ejecutar un **unico comando** que auto-descubre repos y extrae commits:
+**DOBLE PASADA** — Ejecutar Pasada A (por ramas) + Pasada B (por mensaje), combinar y deduplicar.
 
-```bash
-for gitdir in $(find "{ruta_proyecto}" -maxdepth 2 -name ".git" -type d 2>/dev/null | sort); do
-  repo_dir=$(dirname "$gitdir")
-  repo_name=$(basename "$repo_dir")
-  (cd "$repo_dir" && \
-   GIT_PAGER=cat git log \
-     --author="{author_filter}" \
-     --since="$1" --until="$2" \
-     {branch_filters} \
-     --format="$repo_name|%H|%h|%ad|%s|%D" \
-     --date=format:"%Y-%m-%d %H:%M" \
-     2>/dev/null)
-done
-```
+**Ver detalle en** `references/git-log-commands.md`
 
 **Ejemplo concreto para IDT:** ver `examples/salida_esperada.md`
 
 **Formato de salida:** `repo_name|hash_completo|hash_corto|fecha|mensaje|decoraciones`
-
-Cada linea es un commit. Si no hay output, no hubo commits en el periodo para esa entidad.
 
 ### PASO 2: Generar contenido
 
@@ -109,36 +98,7 @@ Ejemplo: `.../ANEXOS/commits_idt_enero.md`
 ### PASO 4: Generar documento Word
 
 1. Resolver `{carpeta_fuentes}` (ya resuelto en PASO 0)
-2. Construir el JSON intermedio con la estructura requerida por `commits_to_docx.py`:
-
-```json
-{
-    "entidad": "{$0}",
-    "periodo_inicio": "{$1}",
-    "periodo_fin": "{$2}",
-    "total_commits": N,
-    "repositorios": ["repo1", "repo2"],
-    "descripcion": "Texto de la seccion A del PASO 2...",
-    "semanas": [
-        {
-            "nombre": "Semana 1 (dd/mm - dd/mm)",
-            "estado": "Finalizado",
-            "fecha_inicio": "dd/mm/aaaa",
-            "fecha_fin": "dd/mm/aaaa",
-            "funcionalidades": ["func1", "func2"]
-        }
-    ],
-    "commits": [
-        {
-            "hash": "8chars",
-            "fecha": "YYYY-MM-DD",
-            "mensaje": "mensaje del commit",
-            "rama": "nombre_rama",
-            "repositorio": "nombre_repo"
-        }
-    ]
-}
-```
+2. Construir el JSON intermedio — **Ver estructura en** `references/json-estructura-docx.md`
 
 3. Escribir JSON intermedio en: `{carpeta_fuentes}/_commits_data_{entidad_lower}_{mes}.json`
 4. Ejecutar:

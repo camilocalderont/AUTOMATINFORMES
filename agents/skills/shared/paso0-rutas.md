@@ -32,3 +32,30 @@ Este bloque es identico para los 11 skills del proyecto. Cada skill DEBE ejecuta
 | `{dia_actual}` | `date +%Y-%m-%d` | generar-informe, generar-soportes-*, resumen-reuniones |
 | `{dia_siguiente}` | `date -v+1d +%Y-%m-%d` | buscar-evidencias |
 | `{log_file}` | `{carpeta_mes}/log_{entidad_lower}_{mes}_{year}.md` | generar-informe |
+
+---
+
+## Reglas compactas (aplican a TODOS los skills)
+
+Estas reglas son OBLIGATORIAS y se verifican automáticamente. Cada regla tiene un código para referencia en logs y reportes de verificación.
+
+### R1 — Ortografía español
+Todo texto generado DEBE tener tildes correctas. Incluye strings en scripts Python (labels, headers, footers). Idioma de documentos Word: `es-CO`. Palabras críticas: período, gestión, información, descripción, reunión, sesión, categoría, solución, título, automáticamente. Sin calificativos subjetivos ("gran esfuerzo", "significativo avance"). Citar evidencia al final de cada obligación.
+
+### R2 — Estilo informes
+Primera persona + pretérito: "Realicé", "Atendí", "Desarrollé". NUNCA tercera persona impersonal ("Se realizó") excepto en Plan de Acción TI (SDMUJER). Estructura: texto directo → (Evidencia: Nombre del anexo).
+
+### R3 — Fechas estrictas
+NUNCA modificar $1/$2 en los `find`. Si retorna 0 → reportar 0, NO ampliar rango. Los timestamps de OneDrive pueden no coincidir con fechas reales — el usuario prefiere precisión sobre completitud.
+
+### R4 — Log con comandos
+Cada PASO registra en log: 1) comando exacto con valores sustituidos, 2) resultado (conteo, éxito/error), 3) hora. NUNCA solo prosa sin comando.
+
+### R5 — OneDrive find
+Warm-up OBLIGATORIO antes de find: `for dir in "{carpeta}"/*/; do ls "$dir" >/dev/null 2>&1; done`. Retry-once si 0 resultados. NUNCA usar `-exec stat -f` en paths OneDrive.
+
+### R6 — Cumplimiento de pasos
+Cada PASO numerado es OBLIGATORIO. NUNCA saltar por presión de contexto. NUNCA sustituir un Bash por inferencia. Reportar resultado ANTES de avanzar. PASO 10 y PASO 11 no son opcionales.
+
+### R7 — No inventar contenido
+NUNCA fabricar cuerpo de correos, documentos o evidencias sin leerlos de la fuente. Si PDF ilegible → reportar al usuario. Si en un hilo de correo el usuario estaba en CC → decir "Participé" no "Envié". Prelación de fuentes: archivo .md > PDF legible > información verbal del usuario > PROHIBIDO inferir.

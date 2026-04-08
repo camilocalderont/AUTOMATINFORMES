@@ -9,6 +9,9 @@ metadata:
   tags: [reuniones, transcripciones, resumen, actas]
 ---
 
+> **REGLAS OBLIGATORIAS** (R1-R7) — ver `agents/skills/shared/paso0-rutas.md#reglas-compactas`. Aplican sin excepción a este skill.
+
+
 # Skill: Resumen de Reuniones
 
 ## ENTRADA

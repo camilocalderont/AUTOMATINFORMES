@@ -10,6 +10,9 @@ metadata:
   mcp-server: calendar-idt
 ---
 
+> **REGLAS OBLIGATORIAS** (R1-R7) — ver `agents/skills/shared/paso0-rutas.md#reglas-compactas`. Aplican sin excepción a este skill.
+
+
 # Skill: Extraer Reuniones del Calendario
 
 Extrae la lista de reuniones del calendario institucional de la entidad en el periodo indicado, usando el MCP server correspondiente (Google Calendar o Outlook).
@@ -144,18 +147,9 @@ Ejemplo: `.../ANEXOS/reuniones_calendario_idt_febrero.md`
 
 ## MANEJO DE ERRORES
 
-- Si el MCP server no responde o falla la autenticacion:
-  1. Registrar el error en el log/conversacion
-  2. **Fallback manual:** Informar al usuario que puede proveer un archivo de reuniones manualmente (`.md`, `.csv` o `.xlsx`) en `{carpeta_fuentes}` con la lista de reuniones del periodo. Si el usuario provee el archivo, leerlo y generar el output normalmente.
-  3. Si no hay fallback disponible: terminar sin generar archivo, registrar en log "Calendar API no disponible, sin archivo manual"
-  4. Indicar pasos de solucion segun el tipo de calendario:
-  - **Google Calendar:**
-    1. Verificar que el archivo de credenciales OAuth existe en `~/.google-calendar-mcp/`
-    2. Verificar que se habilito "Google Calendar API" en Google Cloud Console
-    3. Re-autenticar: `GOOGLE_OAUTH_CREDENTIALS=~/.google-calendar-mcp/oauth-credentials.json npx @cocal/google-calendar-mcp auth`
-  - **Outlook Calendar:**
-    1. Verificar que las variables de entorno del tenant estan configuradas en `.env`
-    2. El MCP de Outlook debe tener permisos de Calendar (scope `Calendars.Read`)
+**Ver detalle en** `references/manejo-errores.md`
+
+Si MCP falla: registrar error → ofrecer fallback manual (archivo .md/.csv en carpeta_fuentes) → indicar pasos de solución según tipo (Google/Outlook).
 
 ## MAPEO A OBLIGACIONES
 
@@ -167,13 +161,6 @@ Las reuniones evidencian coordinacion y participacion. Segun la entidad:
 | IDT | 6 | Participar en reuniones de seguimiento y coordinacion |
 | SDMUJER | 10 | Asistir a reuniones convocadas por la supervision |
 | UAECD | 7 | Participar en las reuniones convocadas |
-
-## EJEMPLO DE USO
-
-```
-/extraer-reuniones-calendario IDT 2026-02-01 2026-02-28
-/extraer-reuniones-calendario IDARTES 2026-02-01 2026-02-28
-```
 
 ## Ejemplos
 

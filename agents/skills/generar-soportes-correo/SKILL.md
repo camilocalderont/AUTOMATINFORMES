@@ -9,6 +9,9 @@ metadata:
   tags: [correos, soporte, mesa-servicios, gmail]
 ---
 
+> **REGLAS OBLIGATORIAS** (R1-R7) — ver `agents/skills/shared/paso0-rutas.md#reglas-compactas`. Aplican sin excepción a este skill.
+
+
 # Skill: Generar Reporte de Soportes por Correo
 
 ## ENTRADA

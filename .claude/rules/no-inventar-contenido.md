@@ -1,0 +1,1 @@
+../../agents/rules/no-inventar-contenido.md

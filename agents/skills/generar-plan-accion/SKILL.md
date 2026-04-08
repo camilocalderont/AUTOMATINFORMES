@@ -9,6 +9,9 @@ metadata:
   tags: [plan-acción, sdmujer, seguridad-digital]
 ---
 
+> **REGLAS OBLIGATORIAS** (R1-R7) — ver `agents/skills/shared/paso0-rutas.md#reglas-compactas`. Aplican sin excepción a este skill.
+
+
 # Skill: Generar Plan de Accion
 
 Genera el reporte de seguimiento del Plan de Accion institucional basado en las evidencias del periodo.
@@ -176,38 +179,15 @@ Donde `{obligaciones}`, `{nombre_anexo}` y `{extension}` vienen de `config.json[
 
 ## Ejemplos
 
-### Ejemplo 1: Ejecucion como sub-skill de generar-informe
-User says: (ejecutado automaticamente dentro de `/generar-informe SDMUJER 2026-02-01 2026-02-28`)
-Actions:
-1. PASO 0: Resuelve rutas, carpeta_planes = .../PLANES/02. FEBRERO
-2. PASO 1A: Encuentra evidencias_sdmujer_febrero.md → modo sub-skill
-3. PASO 2-3: Saltados (ya hay contexto)
-4. PASO 4: Redacta reporte con 4 tematicas basadas en 50+ documentos
-5. PASO 5: Guarda FEBRERO_2026.md en PLANES/
-6. PASO 6: /md-to-docx genera FEBRERO_2026.docx
-7. PASO 7: Copia a FUENTE/ y OBLIGACION_1/, _2/, _3/
-Result: `FEBRERO_2026.md` + `.docx` en PLANES/, `plan_accion_sdmujer_febrero.docx` en FUENTE/
+**Ver ejemplos completos en** `examples/salida_esperada.md`
 
-### Ejemplo 2: Ejecucion standalone
-User says: `/generar-plan-accion SDMUJER 2026-02-01 2026-02-28`
-Actions:
-1. PASO 1B: No existe evidencias file → modo standalone
-2. PASO 2: find 293 archivos, lee contenido de cada uno
-3. PASO 3: Genera INSUMOS_CONSOLIDADOS_FEBRERO_2026.txt
-4. PASO 4: Redacta reporte cualitativo
-5. PASO 5-7: Genera .md, .docx, copia a evidencias
-Result: INSUMOS.txt + reporte .md + .docx en PLANES/, copia en FUENTE/ y OBLIGACION_N/
-
----
+- **Sub-skill:** Lee evidencias existentes → redacta → .md + .docx en PLANES/ → copia a FUENTE/
+- **Standalone:** find archivos → INSUMOS_CONSOLIDADOS → redacta → .md + .docx → copia
 
 ## ARCHIVOS GENERADOS
 
-| Campo | Valor |
-|-------|-------|
-| Nombre MD | `{mes_upper}_{year}.md` |
-| Ubicacion MD | `{carpeta_planes}/` |
-| Nombre DOCX | `{mes_upper}_{year}.docx` |
-| Ubicacion DOCX | `{carpeta_planes}/` |
-| Copia DOCX | `{carpeta_fuentes}/plan_accion_{entidad_lower}_{mes}.docx` |
-| INSUMOS (standalone) | `{carpeta_planes}/INSUMOS_CONSOLIDADOS_{mes_upper}_{year}.txt` |
-| Ejemplo | `.../PLANES/02. FEBRERO/FEBRERO_2026.md` |
+| Archivo | Ubicación |
+|---------|-----------|
+| `{mes_upper}_{year}.md` / `.docx` | `{carpeta_planes}/` |
+| `plan_accion_{entidad_lower}_{mes}.docx` | `{carpeta_fuentes}/` (copia) |
+| `INSUMOS_CONSOLIDADOS_{mes_upper}_{year}.txt` | `{carpeta_planes}/` (solo standalone) |

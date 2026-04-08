@@ -89,11 +89,11 @@ def generate_excel(data, output_path):
 
     ws_resumen["A1"] = f"REPORTE DE TICKETS GLPI - {entidad}"
     ws_resumen["A1"].font = title_font
-    ws_resumen["A2"] = f"Periodo: {periodo_inicio} a {periodo_fin}"
+    ws_resumen["A2"] = f"Período: {periodo_inicio} a {periodo_fin}"
     ws_resumen["A2"].font = Font(size=10, color="666666")
 
     row = 4
-    ws_resumen.cell(row=row, column=1, value="Estadisticas Generales").font = subtitle_font
+    ws_resumen.cell(row=row, column=1, value="Estadísticas Generales").font = subtitle_font
     row += 1
 
     # Contar cerrados
@@ -131,9 +131,9 @@ def generate_excel(data, output_path):
 
     # Por categoria
     row += 1
-    ws_resumen.cell(row=row, column=1, value="Por Categoria").font = subtitle_font
+    ws_resumen.cell(row=row, column=1, value="Por Categoría").font = subtitle_font
     row += 1
-    categorias = Counter(t.get("categoria", "Sin categoria") for t in tickets)
+    categorias = Counter(t.get("categoria", "Sin categoría") for t in tickets)
     for cat, count in sorted(categorias.items()):
         ws_resumen.cell(row=row, column=1, value=cat).font = label_font
         ws_resumen.cell(row=row, column=2, value=count).font = value_font
@@ -146,8 +146,8 @@ def generate_excel(data, output_path):
     ws_tickets = wb.create_sheet("Tickets")
 
     headers = [
-        "ID", "Titulo", "Tipo", "Estado", "Fecha Apertura",
-        "Fecha Cierre", "Prioridad", "Categoria", "Solicitante", "Solucion"
+        "ID", "Título", "Tipo", "Estado", "Fecha Apertura",
+        "Fecha Cierre", "Prioridad", "Categoría", "Solicitante", "Solución"
     ]
     col_widths = [10, 40, 14, 14, 16, 16, 14, 18, 25, 50]
     header_style = create_header_style()

@@ -41,3 +41,17 @@ metadata:
 ## Alcance
 
 Aplica a TODO texto generado: informes de obligaciones, evidencias, commits, reuniones, soportes, log de ejecución, correos.
+
+**Incluye scripts Python** — los strings visibles en documentos Word/Excel generados por scripts en `scripts/` (labels de tablas, encabezados, footers, mensajes) DEBEN tener tildes correctas. Ejemplos:
+- ❌ `"Reunion"` → ✅ `"Reunión"`
+- ❌ `"Descripcion"` → ✅ `"Descripción"`
+- ❌ `"Periodo"` → ✅ `"Período"`
+- ❌ `"sesion"` → ✅ `"sesión"`
+- ❌ `"transcripcion"` → ✅ `"transcripción"`
+- ❌ `"Estadisticas"` → ✅ `"Estadísticas"`
+- ❌ `"Categoria"` → ✅ `"Categoría"`
+- ❌ `"Solucion"` → ✅ `"Solución"`
+- ❌ `"automaticamente"` → ✅ `"automáticamente"`
+- ❌ `"Titulo"` → ✅ `"Título"`
+
+**Idioma del documento:** Los documentos Word generados DEBEN configurar el idioma a `es-CO` (español Colombia) para que Word no marque las palabras con tilde como errores ortográficos.
