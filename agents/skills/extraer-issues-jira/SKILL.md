@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   category: data-processing
   tags: [jira, issues, api, extracción]
+  model: haiku
 ---
 
 > **REGLAS OBLIGATORIAS** (R1-R7) — ver `agents/skills/shared/paso0-rutas.md#reglas-compactas`. Aplican sin excepción a este skill.

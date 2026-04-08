@@ -8,6 +8,7 @@ metadata:
   category: data-processing
   tags: [calendario, reuniones, api, extracción]
   mcp-server: calendar-idt
+  model: sonnet
 ---
 
 > **REGLAS OBLIGATORIAS** (R1-R7) — ver `agents/skills/shared/paso0-rutas.md#reglas-compactas`. Aplican sin excepción a este skill.

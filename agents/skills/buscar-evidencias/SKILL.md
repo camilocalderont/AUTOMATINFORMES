@@ -8,6 +8,7 @@ metadata:
   category: data-processing
   tags: [evidencias, find, archivos, obligaciones]
   mcp-server: document-loader
+  model: sonnet
 ---
 
 > **REGLAS OBLIGATORIAS** (R1-R7) — ver `agents/skills/shared/paso0-rutas.md#reglas-compactas`. Aplican sin excepción a este skill.

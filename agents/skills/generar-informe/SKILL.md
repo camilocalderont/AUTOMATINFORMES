@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   category: project-management
   tags: [informe, obligaciones, orquestador, entidades]
+  model: opus
 ---
 
 > **REGLAS OBLIGATORIAS** (R1-R7) — ver `agents/skills/shared/paso0-rutas.md#reglas-compactas`. Aplican sin excepción a este skill.

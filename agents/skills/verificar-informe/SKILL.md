@@ -2,12 +2,12 @@
 name: verificar-informe
 description: "Validates coherence between obligation text and evidence files in OBLIGACION_N/ folders. Reads each file, verifies it belongs to the reporting period, detects duplicates (PDF>Word>MD), and confirms every mentioned annex exists. Use when user says 'verificar informe', 'validate report', 'check evidence', 'revisar anexos'."
 argument-hint: "[ENTIDAD] [FECHA_INICIO] [FECHA_FIN]"
-model: opus
 metadata:
   author: solercia
   version: "1.0.0"
   category: validation
   tags: [verificación, coherencia, evidencias, obligaciones]
+  model: opus
 ---
 
 > **REGLAS OBLIGATORIAS** (R1-R7) — ver `agents/skills/shared/paso0-rutas.md#reglas-compactas`. Aplican sin excepción a este skill.

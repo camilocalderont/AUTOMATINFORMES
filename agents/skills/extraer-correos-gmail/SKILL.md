@@ -8,6 +8,7 @@ metadata:
   category: data-processing
   tags: [gmail, correos, api, extracción]
   mcp-server: gmail-idt
+  model: sonnet
 ---
 
 > **REGLAS OBLIGATORIAS** (R1-R7) — ver `agents/skills/shared/paso0-rutas.md#reglas-compactas`. Aplican sin excepción a este skill.

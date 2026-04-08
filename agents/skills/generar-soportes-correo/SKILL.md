@@ -7,6 +7,7 @@ metadata:
   version: "1.0.0"
   category: documentation
   tags: [correos, soporte, mesa-servicios, gmail]
+  model: sonnet
 ---
 
 > **REGLAS OBLIGATORIAS** (R1-R7) — ver `agents/skills/shared/paso0-rutas.md#reglas-compactas`. Aplican sin excepción a este skill.
